@@ -1,7 +1,7 @@
 const baseURL = 'https://smallfolio.bitnamiapp.com/somequotes/';
 var app = angular.module('textBoxes', []);
 
-app.filter('fix', function($sce) {
+app.filter('unsafe', function($sce) {
     return function(val) {
         return $sce.trustAsHtml(val);
     };
