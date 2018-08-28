@@ -24,7 +24,7 @@
                     <p ng-bind-html="p.author | fix"></p>
                     <br>
                 </div>
-                <div class="updateButton" ng-click="loadMore()">
+                <div class="updateButton" ng-click="loadMore()" ng-cloak>
                     @{{button}}
                 </div>
             </div>
