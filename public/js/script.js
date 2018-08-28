@@ -1,7 +1,7 @@
 const baseURL = 'https://smallfolio.bitnamiapp.com/somequotes/';
 var app = angular.module('textBoxes', []);
 
-app.filter('unsafe', function($sce) {
+app.filter('fix', function($sce) {
     return function(val) {
         return $sce.trustAsHtml(val);
     };
@@ -23,7 +23,7 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
     }
 
     function authorWP(author) {
-        var authorLink = author.replace(' ', '_');
+        var authorLink = author.replace(/ /g, '_');
         var wpLink = 'http://en.wikipedia.org/wiki/' + authorLink;
 
         author = '<a href=' + wpLink + ' target="_blank">' + author + '</a>';
