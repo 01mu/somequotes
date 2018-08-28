@@ -1,95 +1,82 @@
-<!doctype html>
-<html lang="{{ app()->getLocale() }}">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>Laravel</title>
-
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
-
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Raleway', sans-serif;
-                font-weight: 100;
-                height: 100vh;
-                margin: 0;
-            }
-
-            .full-height {
-                height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
-            .content {
-                text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 12px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-                        <a href="{{ route('register') }}">Register</a>
-                    @endauth
-                </div>
-            @endif
-
-            <div class="content">
-                <div class="title m-b-md">
-                    Laravel
-                </div>
-
-                <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <?php do_includes(); ?>
+    <title>Some Quotes</title>
+    <link rel="icon" type="image/png" href="sq.png">
+    <link href="css/site.css" rel="stylesheet" type="text/css" media="all">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="body">
+            <div ng-app="textBoxes" ng-controller="boxCtrl">
+                <br>
+                <br>
+                <span>
+                    <div ng-repeat="p in quotes" ng-cloak>
+                        <p ng-bind-html="p.quote | unsafe"></p>
+                        <p ng-bind-html="p.author | unsafe"></p>
+                        <br>
+                    </div>
+                </span>
             </div>
         </div>
-    </body>
+    </div>
+    <script>
+const baseURL = 'https://smallfolio.bitnamiapp.com/somequotes/';
+var app = angular.module('textBoxes', []);
+
+app.filter('unsafe', function($sce) {
+    return function(val) {
+        return $sce.trustAsHtml(val);
+    };
+});
+
+app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
+    function($scope, $http, $rootScope) {
+
+    $scope.quotes = [];
+
+        var url = baseURL + 'get_quotes_random.php?limit=50&start=0';
+
+        $.getJSON(url, function(json) {
+            var getQuotes = [];
+            var status = json[0].Response;
+            var quotesRespose = json[1];
+            var quotesSize = quotesRespose.length;
+
+            if(status === 'Good') {
+                for(var i = 0; i < quotesSize; i++) {
+                    var add = {'quote': '"' + quotesRespose[i].quote + '"',
+                        'author': '- ' + quotesRespose[i].author};
+
+                    getQuotes.push(add);
+                }
+            }
+
+            $scope.quotes = getQuotes;
+            $scope.$apply();
+
+        });
+
+}]);
+    </script>
+</body>
 </html>
+
+<?php
+
+function do_includes()
+{
+    echo '
+        <script src="https://ajax.googleapis.com/ajax/li' .
+        'bs/angularjs/1.6.9/angular.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/boots' .
+        'trap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/j' .
+        'query/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/b' .
+        'ootstrap/3.3.7/js/bootstrap.min.js"></script>
+        ';
+}
