@@ -20,8 +20,8 @@
                 <br>
                 <br>
                 <div ng-repeat="p in quotes" ng-cloak>
-                    <p ng-bind-html="p.quote | unsafe"></p>
-                    <p ng-bind-html="p.author | unsafe"></p>
+                    <p ng-bind-html="p.quote | fix"></p>
+                    <p ng-bind-html="p.author | fix"></p>
                     <br>
                 </div>
                 <div class="updateButton" ng-click="loadMore()">
