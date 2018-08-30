@@ -10,7 +10,10 @@ app.filter('fix', function($sce) {
 app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
     function($scope, $http, $rootScope) {
 
-    $scope.quotes = [];
+    $scope.quotes1 = [];
+    $scope.quotes2 = [];
+    $scope.quotes3 = [];
+
     $scope.button = 'Getting quotes...';
 
     var url = baseURL + 'get_quotes_random.php?limit=100&start=0';
@@ -33,7 +36,9 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
 
     function update(type) {
         $.getJSON(url, function(json) {
-            var getQuotes = [];
+            var getQuotes1 = [];
+            var getQuotes2 = [];
+            var getQuotes3 = [];
             var status = json[0].Response;
             var quotesRespose = json[1];
             var quotesSize = quotesRespose.length;
@@ -46,15 +51,27 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
                     var add = {'quote': quote, 'author': '- ' + author};
 
                     if(type === 0) {
-                        getQuotes.push(add);
+                        if(i < 33)
+                        getQuotes1.push(add);
+                        if(i >= 33 && i < 66)
+                        getQuotes2.push(add);
+                        if(i >= 66)
+                        getQuotes3.push(add);
                     } else {
-                        $scope.quotes.push(add);
+                        if(i < 33)
+                        $scope.quotes1.push(add);
+                        if(i >= 33 && i < 66)
+                        $scope.quotes2.push(add);
+                        if(i >= 66)
+                        $scope.quotes3.push(add);
                     }
                 }
             }
 
             if(type === 0) {
-                $scope.quotes = getQuotes;
+                $scope.quotes1 = getQuotes1;
+                $scope.quotes2 = getQuotes2;
+                $scope.quotes3 = getQuotes3;
             }
 
             $scope.button = 'Load more...';

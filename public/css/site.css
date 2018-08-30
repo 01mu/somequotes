@@ -39,7 +39,6 @@ body
     text-overflow: ellipses;
     overflow: hidden;
     margin: 0 auto;
-    max-width: 800px;
 }
 
 .box-w
@@ -118,7 +117,7 @@ body
     background: #e5ddd0;
     padding: 10px;
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     margin-top: 10px;
 }
 
