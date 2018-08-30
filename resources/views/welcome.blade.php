@@ -18,10 +18,15 @@
         <div class="body">
             <div ng-app="textBoxes" ng-controller="boxCtrl">
                 <br>
-                <br>
                 <div ng-repeat="p in quotes" ng-cloak>
-                    <p ng-bind-html="p.quote | fix"></p>
-                    <p ng-bind-html="p.author | fix"></p>
+                    <div ng-if="$odd" class="quote-o" >
+                        <p ng-bind-html="p.quote | fix"></p>
+                        <p ng-bind-html="p.author | fix"></p>
+                    </div>
+                    <div ng-if="$even" class="quote-e" >
+                        <p ng-bind-html="p.quote | fix"></p>
+                        <p ng-bind-html="p.author | fix"></p>
+                    </div>
                     <br>
                 </div>
                 <div class="updateButton" ng-click="loadMore()" ng-cloak>

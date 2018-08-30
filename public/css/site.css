@@ -5,8 +5,29 @@ hr
     height: .5px;
 }
 
+.quote-e
+{
+    border-style: solid;
+    border-color: #cccccc;
+    border-width: 0px;
+    padding: 20px;
+    padding-top: 30px;
+    background-color: #e0dfce;
+}
+
+.quote-o
+{
+    border-style: solid;
+    border-color: #cccccc;
+    border-width: 0px;
+    padding: 20px;
+    padding-top: 30px;
+    background-color: #e8e3d5;
+}
+
 body
 {
+    line-height: 1.6;
     font-size: 22px;
     font-family: Georgia, serif;
     background-color: #f9f0d9;
@@ -37,7 +58,10 @@ body
 
 .title
 {
-    padding: 60px;
+    border-bottom-style: solid;
+    border-bottom-color: #cccccc;
+    border-bottom-width: 1px;
+    padding: 80px;
     background-color: #e5e3cc;
     text-align: center;
 }
