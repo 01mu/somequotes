@@ -17,26 +17,22 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
     $scope.button = 'Getting quotes...';
 
     var trackPage = 0;
+    var quoteSearchFlag = 0;
 
-    var searchQuote = getParameterByName('q');
-    var searchAuthor = getParameterByName('a');
-
-    var url;
-
-    if(searchQuote == null && searchAuthor == null) {
-        url = baseURL + 'get_quotes_random.php?limit=100&start=0';
-    } else if(searchQuote != null) {
-        url = baseURL + 'get_quotes_search.php?query=' + searchQuote +
-            '&limit=100&start=0';
-    }
+    var url = baseURL + 'get_quotes_random.php?limit=100&start=0';
 
     update(0);
 
-    $scope.loadMore = function() {
-        trackPage += 100
+    //$scope.name='assss';
+    //alert($scope.something);
 
-        url = baseURL + 'get_quotes_search.php?query=' + $scope.qSearch +
-            '&limit=100&start=' + trackPage;
+    $scope.loadMore = function() {
+        if(quoteSearchFlag == 1) {
+            trackPage += 100
+
+            url = baseURL + 'get_quotes_search.php?query=' + $scope.qSearch +
+                '&limit=100&start=' + trackPage;
+        }
 
         $scope.button = 'Loading...';
 
@@ -53,6 +49,8 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
     }
 
     $scope.quoteSearch = function() {
+        quoteSearchFlag = 1;
+
         url = baseURL + 'get_quotes_search.php?query=' + $scope.qSearch +
             '&limit=100&start=' + trackPage;
 
