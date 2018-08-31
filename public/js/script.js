@@ -16,12 +16,30 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
 
     $scope.button = 'Getting quotes...';
 
-    var url = baseURL + 'get_quotes_random.php?limit=100&start=0';
+    var trackPage = 0;
+
+    var searchQuote = getParameterByName('q');
+    var searchAuthor = getParameterByName('a');
+
+    var url;
+
+    if(searchQuote == null && searchAuthor == null) {
+        url = baseURL + 'get_quotes_random.php?limit=100&start=0';
+    } else if(searchQuote != null) {
+        url = baseURL + 'get_quotes_search.php?query=' + searchQuote +
+            '&limit=100&start=0';
+    }
 
     update(0);
 
     $scope.loadMore = function() {
+        trackPage += 100
+
+        url = baseURL + 'get_quotes_search.php?query=' + $scope.qSearch +
+            '&limit=100&start=' + trackPage;
+
         $scope.button = 'Loading...';
+
         update(1);
     }
 
@@ -34,6 +52,15 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
         return author;
     }
 
+    $scope.quoteSearch = function() {
+        url = baseURL + 'get_quotes_search.php?query=' + $scope.qSearch +
+            '&limit=100&start=' + trackPage;
+
+        update(0);
+
+        $('html, body').animate({ scrollTop: 0 }, 'fast');
+    }
+
     function update(type) {
         $.getJSON(url, function(json) {
             var getQuotes1 = [];
@@ -43,6 +70,8 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
             var quotesRespose = json[1];
             var quotesSize = quotesRespose.length;
 
+            var arrFlag = 0;
+
             if(status === 'Good') {
                 for(var i = 0; i < quotesSize; i++) {
                     var quote = '"' + quotesRespose[i].quote + '"';
@@ -51,19 +80,27 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
                     var add = {'quote': quote, 'author': '- ' + author};
 
                     if(type === 0) {
-                        if(i < 33)
-                        getQuotes1.push(add);
-                        if(i >= 33 && i < 66)
-                        getQuotes2.push(add);
-                        if(i >= 66)
-                        getQuotes3.push(add);
+                        switch(arrFlag)
+                        {
+                            case 0: getQuotes1.push(add); break;
+                            case 1: getQuotes2.push(add); break;
+                            case 2: getQuotes3.push(add); break;
+                            default: break;
+                        }
                     } else {
-                        if(i < 33)
-                        $scope.quotes1.push(add);
-                        if(i >= 33 && i < 66)
-                        $scope.quotes2.push(add);
-                        if(i >= 66)
-                        $scope.quotes3.push(add);
+                        switch(arrFlag)
+                        {
+                            case 0: $scope.quotes1.push(add); break;
+                            case 1: $scope.quotes2.push(add); break;
+                            case 2: $scope.quotes3.push(add); break;
+                            default: break;
+                        }
+                    }
+
+                    arrFlag++;
+
+                    if(arrFlag == 3) {
+                        arrFlag = 0;
                     }
                 }
             }
@@ -79,3 +116,13 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
         });
     }
 }]);
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}

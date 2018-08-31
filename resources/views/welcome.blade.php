@@ -8,62 +8,73 @@
     <link rel="icon" type="image/png" href="img/sq.png">
     <link href="css/site.css" rel="stylesheet" type="text/css" media="all">
 </head>
-<body>
-    <div class="title">
-        <div class="title-text">
-            Some Quotes
-        </div>
+<body ng-app="textBoxes" ng-controller="boxCtrl">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="#">Some Quotes</a>
     </div>
+    <form class="navbar-form navbar-right">
+        <form novalidate>
+            <input type="text" placeholder="Search Quotes" ng-model="qSearch">
+            <button ng-click="quoteSearch()">Search</button>
+        </form>
+    </form>
+    <form class="navbar-form navbar-right">
+        <form novalidate>
+            <input type="text" placeholder="Search Authors" ng-model="aSearch">
+            <button ng-click="authorSearch()">Search</button>
+        </form>
+    </form>
+    </nav>
+    <div style="margin-bottom: 40px;"></div>
     <div class="container-fluid">
         <div class="body">
-            <div ng-app="textBoxes" ng-controller="boxCtrl">
-                <div class="row">
-                    <div class="col-sm-4">
-                        <br>
-                        <div ng-repeat="p in quotes1" ng-cloak>
-                            <div ng-if="$odd" class="quote-o" >
-                                <p ng-bind-html="p.quote | fix"></p>
-                                <p ng-bind-html="p.author | fix"></p>
-                            </div>
-                            <div ng-if="$even" class="quote-e" >
-                                <p ng-bind-html="p.quote | fix"></p>
-                                <p ng-bind-html="p.author | fix"></p>
-                            </div>
-                            <br>
+            <div class="row">
+                <div class="col-sm-4">
+                    <br>
+                    <div ng-repeat="p in quotes1" ng-cloak>
+                        <div ng-if="$odd" class="quote-o" >
+                            <p ng-bind-html="p.quote | fix"></p>
+                            <p ng-bind-html="p.author | fix"></p>
                         </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <br>
-                        <div ng-repeat="p in quotes2" ng-cloak>
-                            <div ng-if="$odd" class="quote-o" >
-                                <p ng-bind-html="p.quote | fix"></p>
-                                <p ng-bind-html="p.author | fix"></p>
-                            </div>
-                            <div ng-if="$even" class="quote-e" >
-                                <p ng-bind-html="p.quote | fix"></p>
-                                <p ng-bind-html="p.author | fix"></p>
-                            </div>
-                            <br>
+                        <div ng-if="$even" class="quote-e" >
+                            <p ng-bind-html="p.quote | fix"></p>
+                            <p ng-bind-html="p.author | fix"></p>
                         </div>
-                    </div>
-                    <div class="col-sm-4">
                         <br>
-                        <div ng-repeat="p in quotes3" ng-cloak>
-                            <div ng-if="$odd" class="quote-o" >
-                                <p ng-bind-html="p.quote | fix"></p>
-                                <p ng-bind-html="p.author | fix"></p>
-                            </div>
-                            <div ng-if="$even" class="quote-e" >
-                                <p ng-bind-html="p.quote | fix"></p>
-                                <p ng-bind-html="p.author | fix"></p>
-                            </div>
-                            <br>
-                        </div>
                     </div>
                 </div>
-                <div class="updateButton" ng-click="loadMore()" ng-cloak>
-                    @{{button}}
+                <div class="col-sm-4">
+                    <br>
+                    <div ng-repeat="p in quotes2" ng-cloak>
+                        <div ng-if="$odd" class="quote-o" >
+                            <p ng-bind-html="p.quote | fix"></p>
+                            <p ng-bind-html="p.author | fix"></p>
+                        </div>
+                        <div ng-if="$even" class="quote-e" >
+                            <p ng-bind-html="p.quote | fix"></p>
+                            <p ng-bind-html="p.author | fix"></p>
+                        </div>
+                        <br>
+                    </div>
                 </div>
+                <div class="col-sm-4">
+                    <br>
+                    <div ng-repeat="p in quotes3" ng-cloak>
+                        <div ng-if="$odd" class="quote-o" >
+                            <p ng-bind-html="p.quote | fix"></p>
+                            <p ng-bind-html="p.author | fix"></p>
+                        </div>
+                        <div ng-if="$even" class="quote-e" >
+                            <p ng-bind-html="p.quote | fix"></p>
+                            <p ng-bind-html="p.author | fix"></p>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+            </div>
+            <div class="updateButton" ng-click="loadMore()" ng-cloak>
+                @{{button}}
             </div>
         </div>
     </div>

@@ -125,3 +125,19 @@ body
 {
     background: #e5d9c7
 }
+
+.navbar-fixed-top
+{
+    background: #b9ba9a;
+    border-color: #000000;
+}
+
+.navbar-header .navbar-brand
+{
+    color: #000000;
+}
+
+.navbar-form
+{
+    margin-right: 10px;
+}
