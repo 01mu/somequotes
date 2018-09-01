@@ -11,9 +11,9 @@
 <body ng-app="textBoxes" ng-init="something=add" ng-controller="boxCtrl">
     <div style="margin-bottom: 70px;"></div>
     <div class="container-fluid">
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">- Some Quotes -</a>
+      <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">- Some Quotes -</a>
     </div>
     <form class="navbar-form navbar-right">
         <form novalidate>
@@ -70,11 +70,11 @@
                 </div>
                 <div class="col-sm-4">
                     <div ng-repeat="p in quotes2" ng-cloak>
-                        <div ng-if="$odd" class="quote-o" >
+                        <div ng-if="$even" class="quote-o" >
                             <p ng-bind-html="p.quote | fix"></p>
                             <p ng-bind-html="p.author | fix"></p>
                         </div>
-                        <div ng-if="$even" class="quote-e" >
+                        <div ng-if="$odd" class="quote-e" >
                             <p ng-bind-html="p.quote | fix"></p>
                             <p ng-bind-html="p.author | fix"></p>
                         </div>
@@ -101,7 +101,9 @@
         </div>
     </div>
     <div class="footer">
-        Some Quotes
+        Some Quotes | All quotes from
+        <a href="https://en.wikiquote.org/wiki/Main_Page">wikiquote.org</a>
+        | Some Quotes is not affiliated with Wikiquote
     </div>
    <script src="js/script.js"></script>
 </body>

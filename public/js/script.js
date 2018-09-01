@@ -1,3 +1,7 @@
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover();
+});
+
 const baseURL = 'https://smallfolio.bitnamiapp.com/somequotes/';
 var app = angular.module('textBoxes', []);
 
@@ -13,18 +17,17 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
     $scope.quotes1 = [];
     $scope.quotes2 = [];
     $scope.quotes3 = [];
-
     $scope.authors = [];
-
-    $scope.button = 'Getting quotes...';
 
     var trackPage = 0;
     var quoteSearchFlag = 0;
     var authorSearchFlag = 0;
-
     var url = baseURL + 'get_quotes_random.php?limit=100&start=0';
+    var lastSearch = '';
 
-    update(0, url);
+    $scope.button = 'Getting quotes...';
+
+    updateQuotes(0, url, 0, '');
 
     $scope.loadMore = function() {
         $scope.button = 'Loading...';
@@ -35,7 +38,7 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
             var url = baseURL + 'get_quotes_search.php?query=' +
                 $scope.qSearch + '&limit=100&start=' + trackPage;
 
-            update(1, url);
+            updateQuotes(1, url, 1, lastSearch);
         } else if(authorSearchFlag == 1) {
             trackPage += 100;
 
@@ -46,31 +49,45 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
         } else {
             var url = baseURL + 'get_quotes_random.php?limit=100&start=0';
 
-            update(1, url);
+            updateQuotes(1, url, 0, '');
         }
     }
 
     $scope.authorSearch = function() {
-        var url = baseURL + 'get_author_search.php?limit=100&start=0&query=' +
-            $scope.aSearch;
+        if($scope.aSearch != null) {
+            var url = baseURL + 'get_author_search.php?limit=100&start=0&query='
+                + $scope.aSearch;
 
-        updateAuthors(0, url);
+            $scope.quotes1 = [];
+            $scope.quotes2 = [];
+            $scope.quotes3 = [];
 
-        $('html, body').animate({ scrollTop: 0 }, 'fast');
+            quoteSearchFlag = 0;
+            authorSearchFlag = 1;
+
+            updateAuthors(0, url);
+
+            $('html, body').animate({ scrollTop: 0 }, 'fast');
+        }
     }
 
     $scope.quoteSearch = function() {
-        $scope.authors = [];
-        trackPage = 0;
+        if($scope.qSearch != null) {
+            $scope.authors = [];
+            trackPage = 0;
 
-        quoteSearchFlag = 1;
+            quoteSearchFlag = 1;
+            authorSearchFlag = 0;
 
-        var url = baseURL + 'get_quotes_search.php?query=' + $scope.qSearch +
-            '&limit=100&start=' + trackPage;
+            var url = baseURL + 'get_quotes_search.php?query='
+                + $scope.qSearch + '&limit=100&start=' + trackPage;
 
-        update(0, url);
+            lastSearch = $scope.qSearch;
 
-        $('html, body').animate({ scrollTop: 0 }, 'fast');
+            updateQuotes(0, url, 1, lastSearch);
+
+            $('html, body').animate({ scrollTop: 0 }, 'fast');
+        }
     }
 
     $scope.setAuthor = function(guy) {
@@ -80,11 +97,12 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
 
         $.getJSON(url, function(json) {
             var status = json[0].Response;
-            var authorsResponse = json[1];
-            var authorsSize = authorsResponse.length;
-            var arrFlag = 0;
 
             if(status === 'Good') {
+                var authorsResponse = json[1];
+                var authorsSize = authorsResponse.length;
+                var arrFlag = 0;
+
                 for(var i = 0; i < authorsSize; i++) {
                     var author = '- ' + authorWP(guy.author);
                     var quote = '"' + authorsResponse[i]['quote'] + '"';
@@ -99,11 +117,7 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
                         default: break;
                     }
 
-                    arrFlag++;
-
-                    if(arrFlag == 3) {
-                        arrFlag = 0;
-                    }
+                    arrFlag = checkArrFlag(arrFlag);
                 }
             }
 
@@ -112,13 +126,6 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
     }
 
     function updateAuthors(type, url) {
-        $scope.quotes1 = [];
-        $scope.quotes2 = [];
-        $scope.quotes3 = [];
-
-        quoteSearchFlag = 0;
-        authorSearchFlag = 1;
-
         if(type === 0) {
             trackPage = 0;
             $scope.authors = [];
@@ -126,10 +133,11 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
 
         $.getJSON(url, function(json) {
             var status = json[0].Response;
-            var authorsResponse = json[1];
-            var authorsSize = authorsResponse.length;
 
             if(status === 'Good') {
+                var authorsResponse = json[1];
+                var authorsSize = authorsResponse.length;
+
                 for(var i = 0; i < authorsSize; i++) {
                     var add = {'author': authorsResponse[i]['author']};
 
@@ -142,21 +150,26 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
         });
     }
 
-    function update(type, url) {
+    function updateQuotes(type, url, hl, hlStr) {
         $.getJSON(url, function(json) {
-            var getQuotes1 = [];
-            var getQuotes2 = [];
-            var getQuotes3 = [];
             var status = json[0].Response;
-            var quotesRespose = json[1];
-            var quotesSize = quotesRespose.length;
 
-            var arrFlag = 0;
+            if(status == 'Good') {
+                var getQuotes1 = [];
+                var getQuotes2 = [];
+                var getQuotes3 = [];
+                var quotesRespose = json[1];
+                var quotesSize = quotesRespose.length;
 
-            if(status === 'Good') {
+                var arrFlag = 0;
+
                 for(var i = 0; i < quotesSize; i++) {
                     var quote = '"' + quotesRespose[i].quote + '"';
                     var author = authorWP(quotesRespose[i].author);
+
+                    if(hl === 1) {
+                        quote = str_highlight_text(quote, hlStr)
+                    }
 
                     var add = {'quote': quote, 'author': '- ' + author};
 
@@ -178,27 +191,19 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
                         }
                     }
 
-                    arrFlag++;
-
-                    if(arrFlag == 3) {
-                        arrFlag = 0;
-                    }
+                    arrFlag = checkArrFlag(arrFlag);
                 }
-            }
 
-            if(type === 0) {
-                $scope.quotes1 = getQuotes1;
-                $scope.quotes2 = getQuotes2;
-                $scope.quotes3 = getQuotes3;
-            }
+                if(type === 0) {
+                    $scope.quotes1 = getQuotes1;
+                    $scope.quotes2 = getQuotes2;
+                    $scope.quotes3 = getQuotes3;
+                }
 
-            $scope.button = 'Load more...';
-            $scope.$apply();
+                $scope.button = 'Load more...';
+                $scope.$apply();
+            }
         });
-    }
-
-    function ass() {
-        alert('ass');
     }
 
     function authorWP(author) {
@@ -208,5 +213,23 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
         author = '<a href=' + wpLink + ' target="_blank">' + author + '</a>';
 
         return author;
+    }
+
+    function checkArrFlag(arrFlag) {
+        arrFlag++;
+
+        if(arrFlag == 3) {
+            arrFlag = 0;
+        }
+
+        return arrFlag;
+    }
+
+    function str_highlight_text(string, str_to_highlight){
+        var reg = new RegExp(str_to_highlight, 'gi');
+
+        return string.replace(reg, function(str) {
+            return '<span style="background-color:#fffa00;">' +
+                str + '</span>'});
     }
 }]);
