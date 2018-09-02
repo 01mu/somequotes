@@ -17,7 +17,12 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
     $scope.quotes1 = [];
     $scope.quotes2 = [];
     $scope.quotes3 = [];
+
     $scope.authors = [];
+
+    $scope.relations = [];
+
+    initRelations();
 
     var trackPage = 0;
     var quoteSearchFlag = 0;
@@ -30,6 +35,7 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
     updateQuotes(0, url, 0, '');
 
     $scope.loadMore = function() {
+        $scope.relation = '';
         $scope.button = 'Loading...';
 
         if(quoteSearchFlag == 1) {
@@ -61,6 +67,8 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
             $scope.quotes1 = [];
             $scope.quotes2 = [];
             $scope.quotes3 = [];
+            $scope.relation = '';
+            initRelations()
 
             quoteSearchFlag = 0;
             authorSearchFlag = 1;
@@ -73,8 +81,10 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
 
     $scope.quoteSearch = function() {
         if($scope.qSearch != null) {
+            initRelations()
             $scope.authors = [];
             trackPage = 0;
+            $scope.relation = '';
 
             quoteSearchFlag = 1;
             authorSearchFlag = 0;
@@ -91,20 +101,33 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
     }
 
     $scope.setAuthor = function(guy) {
+        $scope.quotes1 = [];
+        $scope.quotes2 = [];
+        $scope.quotes3 = [];
         $scope.authors = [];
 
-        var url = baseURL + 'get_author_single.php?author=' + guy.author;
+        initRelations();
+
+        $scope.relation = '';
+
+        $('html, body').animate({ scrollTop: 0 }, 'fast');
+
+        var url = baseURL + 'get_author_single.php?author=' + guy;
 
         $.getJSON(url, function(json) {
             var status = json[0].Response;
 
             if(status === 'Good') {
                 var authorsResponse = json[1];
+                var relations = json[2];
+                var relationsSize = relations.length;
                 var authorsSize = authorsResponse.length;
                 var arrFlag = 0;
 
+                $scope.relation = guy + ' relations';
+
                 for(var i = 0; i < authorsSize; i++) {
-                    var author = '- ' + authorWP(guy.author);
+                    var author = '- ' + authorWP(guy);
                     var quote = '"' + authorsResponse[i]['quote'] + '"';
 
                     var add = {'author': author, 'quote': quote};
@@ -117,7 +140,17 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
                         default: break;
                     }
 
-                    arrFlag = checkArrFlag(arrFlag);
+                    arrFlag = checkArrFlag(arrFlag, 3);
+                }
+
+                arrFlag = 0;
+
+                for(var i = 0; i < relationsSize; i++) {
+                    var add = {'relation': relations[i]};
+
+                    $scope.relations[arrFlag].push(add);
+
+                    arrFlag = checkArrFlag(arrFlag, 3);
                 }
             }
 
@@ -191,7 +224,7 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
                         }
                     }
 
-                    arrFlag = checkArrFlag(arrFlag);
+                    arrFlag = checkArrFlag(arrFlag, 3);
                 }
 
                 if(type === 0) {
@@ -215,10 +248,10 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
         return author;
     }
 
-    function checkArrFlag(arrFlag) {
+    function checkArrFlag(arrFlag, count) {
         arrFlag++;
 
-        if(arrFlag == 3) {
+        if(arrFlag == count) {
             arrFlag = 0;
         }
 
@@ -231,5 +264,11 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
         return string.replace(reg, function(str) {
             return '<span style="background-color:#fffa00;">' +
                 str + '</span>'});
+    }
+
+    function initRelations() {
+        for(var i = 0; i < 3; i++) {
+            $scope.relations[i] = [];
+        }
     }
 }]);
