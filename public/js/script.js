@@ -100,6 +100,14 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
         }
     }
 
+    $scope.title = function() {
+        $scope.authors = [];
+        initRelations();
+        $scope.relation = '';
+
+        updateQuotes(0, url, 0, '');
+    }
+
     $scope.setAuthor = function(guy) {
         $scope.quotes1 = [];
         $scope.quotes2 = [];
@@ -204,7 +212,8 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
                         quote = str_highlight_text(quote, hlStr)
                     }
 
-                    var add = {'quote': quote, 'author': '- ' + author};
+                    var add = {'quote': quote, 'author': '- ' + author,
+                        'authorRaw': quotesRespose[i].author};
 
                     if(type === 0) {
                         switch(arrFlag)

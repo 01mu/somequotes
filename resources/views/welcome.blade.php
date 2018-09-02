@@ -9,25 +9,24 @@
     <link href="css/site.css" rel="stylesheet" type="text/css" media="all">
 </head>
 <body ng-app="textBoxes" ng-init="something=add" ng-controller="boxCtrl">
-    <div style="margin-bottom: 70px;"></div>
-    <div class="container-fluid">
-      <nav class="navbar navbar-inverse navbar-fixed-top">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">- Some Quotes -</a>
-    </div>
-    <form class="navbar-form navbar-right">
-        <form novalidate>
-            <input class="form-control" type="text" placeholder="Search Quotes" ng-model="qSearch">
-            <button class="btn btn-default" ng-click="quoteSearch()">Search</button>
+            <a class="navbar-brand" ng-click="title()">Some Quotes</a>
+        </div>
+        <form class="navbar-form navbar-right">
+            <form novalidate>
+                <input class="form-control" type="text" placeholder="Search Quotes" ng-model="qSearch">
+                <button class="btn btn-default" ng-click="quoteSearch()">Search</button>
+            </form>
         </form>
-    </form>
-    <form class="navbar-form navbar-right">
-        <form novalidate>
-            <input class="form-control" type="text" placeholder="Search Authors" ng-model="aSearch">
-            <button class="btn btn-default" ng-click="authorSearch()">Search</button>
+        <form class="navbar-form navbar-right">
+            <form novalidate>
+                <input class="form-control" type="text" placeholder="Search Authors" ng-model="aSearch">
+                <button class="btn btn-default" ng-click="authorSearch()">Search</button>
+            </form>
         </form>
-    </form>
     </nav>
+    <div class="container-fluid">
         <div class="body">
             <!--<div class="row">
                 <div class="col-sm-4">
@@ -57,39 +56,45 @@
             <div class="row">
                 <div class="col-sm-4">
                     <div ng-repeat="p in quotes1" ng-cloak>
-                        <div ng-if="$odd" class="quote-o" >
+                        <div ng-if="$odd" class="quote-o"
+                            ng-click="setAuthor(p.authorRaw)">
                             <p ng-bind-html="p.quote | fix"></p>
-                            <p class="right" ng-bind-html="p.author | fix"></p>
+                            <p ng-click="$event.stopPropagation()" class="right" ng-bind-html="p.author | fix"></p>
                         </div>
-                        <div ng-if="$even" class="quote-e" >
+                        <div ng-if="$even" class="quote-e"
+                            ng-click="setAuthor(p.authorRaw)">
                             <p ng-bind-html="p.quote | fix"></p>
-                            <p class="right" ng-bind-html="p.author | fix"></p>
+                            <p ng-click="$event.stopPropagation()" class="right" ng-bind-html="p.author | fix"></p>
                         </div>
                         <br>
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div ng-repeat="p in quotes2" ng-cloak>
-                        <div ng-if="$even" class="quote-o" >
+                        <div ng-if="$even" class="quote-o"
+                            ng-click="setAuthor(p.authorRaw)">
                             <p ng-bind-html="p.quote | fix"></p>
-                            <p class="right" ng-bind-html="p.author | fix"></p>
+                            <p ng-click="$event.stopPropagation()" class="right" ng-bind-html="p.author | fix"></p>
                         </div>
-                        <div ng-if="$odd" class="quote-e" >
+                        <div ng-if="$odd" class="quote-e"
+                            ng-click="setAuthor(p.authorRaw)">
                             <p ng-bind-html="p.quote | fix"></p>
-                            <p class="right" ng-bind-html="p.author | fix"></p>
+                            <p ng-click="$event.stopPropagation()" class="right" ng-bind-html="p.author | fix"></p>
                         </div>
                         <br>
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div ng-repeat="p in quotes3" ng-cloak>
-                        <div ng-if="$odd" class="quote-o" >
+                        <div ng-if="$odd" class="quote-o"
+                            ng-click="setAuthor(p.authorRaw)">
                             <p ng-bind-html="p.quote | fix"></p>
-                            <p class="right" ng-bind-html="p.author | fix"></p>
+                            <p ng-click="$event.stopPropagation()" class="right" ng-bind-html="p.author | fix"></p>
                         </div>
-                        <div ng-if="$even" class="quote-e" >
+                        <div ng-if="$even" class="quote-e"
+                            ng-click="setAuthor(p.authorRaw)">
                             <p ng-bind-html="p.quote | fix"></p>
-                            <p class="right" ng-bind-html="p.author | fix"></p>
+                            <p ng-click="$event.stopPropagation()" class="right" ng-bind-html="p.author | fix"></p>
                         </div>
                         <br>
                     </div>
