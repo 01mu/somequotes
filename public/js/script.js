@@ -14,6 +14,9 @@ app.filter('fix', function($sce) {
 app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
     function($scope, $http, $rootScope) {
 
+    $scope.loading = "img/nothing.png";
+    //$scope.hideLoadingBar = false;
+
     $scope.quotes1 = [];
     $scope.quotes2 = [];
     $scope.quotes3 = [];
@@ -21,6 +24,8 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
     $scope.authors = [];
 
     $scope.relations = [];
+
+    $scope.hideLoadingBar = false;
 
     initRelations();
 
@@ -35,6 +40,8 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
     updateQuotes(0, url, 0, '');
 
     $scope.loadMore = function() {
+        $scope.hideLoadingBar = true;
+        $scope.loading = "img/load.gif";
         $scope.relation = '';
         $scope.button = 'Loading...';
 
@@ -60,6 +67,8 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
     }
 
     $scope.authorSearch = function() {
+        $scope.loading = "img/load.gif";
+
         if($scope.aSearch != null) {
             var url = baseURL + 'get_author_search.php?limit=100&start=0&query='
                 + $scope.aSearch;
@@ -80,6 +89,8 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
     }
 
     $scope.quoteSearch = function() {
+        $scope.loading = "img/load.gif";
+
         if($scope.qSearch != null) {
             initRelations()
             $scope.authors = [];
@@ -101,14 +112,19 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
     }
 
     $scope.title = function() {
+        $scope.loading = "img/load.gif";
         $scope.authors = [];
         initRelations();
         $scope.relation = '';
 
         updateQuotes(0, url, 0, '');
+
+        $('html, body').animate({ scrollTop: 0 }, 'fast');
     }
 
     $scope.setAuthor = function(guy) {
+        $scope.loading = "img/load.gif";
+
         $scope.quotes1 = [];
         $scope.quotes2 = [];
         $scope.quotes3 = [];
@@ -162,6 +178,7 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
                 }
             }
 
+            $scope.loading = "img/nothing.png";
             $scope.$apply();
         });
     }
@@ -187,6 +204,7 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
             }
 
             $scope.button = 'Load more...';
+            $scope.loading = "img/nothing.png";
             $scope.$apply();
         });
     }
@@ -243,6 +261,7 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
                 }
 
                 $scope.button = 'Load more...';
+                $scope.loading = "img/nothing.png";
                 $scope.$apply();
             }
         });

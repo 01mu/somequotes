@@ -11,6 +11,9 @@
 <body ng-app="textBoxes" ng-init="something=add" ng-controller="boxCtrl">
   <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-header">
+            <div class="navbar-left">
+                <img class="titleimg" ng-src="img/sq.png" ng-click="title()"/>
+            </div>
             <a class="navbar-brand" ng-click="title()">Some Quotes</a>
         </div>
         <form class="navbar-form navbar-right">
@@ -25,7 +28,11 @@
                 <button class="btn btn-default" ng-click="authorSearch()">Search</button>
             </form>
         </form>
+        <div class="navbar-right">
+            <img class="loading" ng-cloak ng-src="@{{loading}}"/>
+        </div>
     </nav>
+    <div style="margin-top: 70px;"></div>
     <div class="container-fluid">
         <div class="body">
             <!--<div class="row">
@@ -100,7 +107,9 @@
                     </div>
                 </div>
             </div>
-            @{{relation}}
+            <span ng-cloak>
+                @{{relation}}
+            </span>
             <div class="row">
                 <div class="col-sm-4">
                     <div ng-repeat="p in relations[0]" ng-cloak>
@@ -109,7 +118,7 @@
                             <p ng-bind-html="p.relation | fix"></p>
                         </div>
                         <div ng-if="$even" class="relation-e"
-                            ng-click="$setAuthor(p.relation)">
+                            ng-click="setAuthor(p.relation)">
                             <p ng-bind-html="p.relation | fix"></p>
                         </div>
                         <br>
@@ -142,7 +151,7 @@
                     </div>
                 </div>
             </div>
-            <div class="updateButton" ng-click="loadMore()" ng-cloak>
+            <div class="updateButton" ng-click="loadMore()" ng-cloak ng-hide="0">
                 @{{button}}
             </div>
         </div>
