@@ -3,6 +3,7 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php do_includes(); ?>
     <title>Some Quotes</title>
     <link rel="icon" type="image/png" href="img/sq.png">
@@ -33,6 +34,9 @@
         </div>
     </nav>
     <div style="margin-top: 70px;"></div>
+    <div class="header" ng-cloak>
+        @{{header}}
+    </div>
     <div class="container-fluid">
         <div class="body">
             <!--<div class="row">
@@ -62,7 +66,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-4">
-                    <div ng-repeat="p in quotes1" ng-cloak>
+                    <div ng-repeat="p in quotes[0]" ng-cloak>
                         <div ng-if="$odd" class="quote-o"
                             ng-click="setAuthor(p.authorRaw)">
                             <p ng-bind-html="p.quote | fix"></p>
@@ -77,7 +81,7 @@
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <div ng-repeat="p in quotes2" ng-cloak>
+                    <div ng-repeat="p in quotes[1]" ng-cloak>
                         <div ng-if="$even" class="quote-o"
                             ng-click="setAuthor(p.authorRaw)">
                             <p ng-bind-html="p.quote | fix"></p>
@@ -92,7 +96,7 @@
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <div ng-repeat="p in quotes3" ng-cloak>
+                    <div ng-repeat="p in quotes[2]" ng-cloak>
                         <div ng-if="$odd" class="quote-o"
                             ng-click="setAuthor(p.authorRaw)">
                             <p ng-bind-html="p.quote | fix"></p>

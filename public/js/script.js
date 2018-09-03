@@ -3,6 +3,7 @@ $(document).ready(function(){
 });
 
 const baseURL = 'https://smallfolio.bitnamiapp.com/somequotes/';
+
 var app = angular.module('textBoxes', []);
 
 app.filter('fix', function($sce) {
@@ -14,33 +15,28 @@ app.filter('fix', function($sce) {
 app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
     function($scope, $http, $rootScope) {
 
-    $scope.hideLoadingBar = 0;
-    setLoadingGif(0);
-
-    $scope.quotes1 = [];
-    $scope.quotes2 = [];
-    $scope.quotes3 = [];
-
-    $scope.authors = [];
-
-    $scope.relations = [];
-
-    initRelations();
-
     var trackPage = 0;
     var quoteSearchFlag = 0;
     var authorSearchFlag = 0;
+
     var url = baseURL + 'get_quotes_random.php?limit=100&start=0';
-    var lastSearch = '';
 
-    $scope.button = 'Getting quotes...';
+    setHeaderText('Random quotes');
+    setLoadingText('Getting quotes...');
 
-    updateQuotes(0, url, 0, '');
+    updateQuotes(0, url, 0);
+
+    setLoadingBar(0);
+    setLoadingGif(1);
+
+    initAuthors();
+    initRelations();
+    initQuotes();
 
     $scope.loadMore = function() {
         setLoadingGif(1);
-        $scope.relation = '';
-        $scope.button = 'Loading...';
+        setRelationText('');
+        setLoadingText('Loading...');
 
         if(quoteSearchFlag == 1) {
             trackPage += 100;
@@ -48,18 +44,17 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
             var url = baseURL + 'get_quotes_search.php?query=' +
                 $scope.qSearch + '&limit=100&start=' + trackPage;
 
-            updateQuotes(1, url, 1, lastSearch);
+            updateQuotes(1, url, 1);
         } else if(authorSearchFlag == 1) {
-            trackPage += 100;
+            url = baseURL + 'get_author_search.php?limit=100&start=0' +
+                '&query=' + $scope.aSearch;
 
-            url = baseURL + 'get_author_search.php?limit=100&start=' +
-                trackPage + '&query=' + $scope.aSearch;
-
-            updateAuthors(1, url);
-        } else {$scope.hideLoadingBar = false;
+            updateAuthors(0, url);
+        } else {
+            setLoadingBar(0);
             var url = baseURL + 'get_quotes_random.php?limit=100&start=0';
 
-            updateQuotes(1, url, 0, '');
+            updateQuotes(1, url, 0);
         }
     }
 
@@ -68,16 +63,17 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
             var url = baseURL + 'get_author_search.php?limit=100&start=0&query='
                 + $scope.aSearch;
 
+            trackPage = 0;
+
             setLoadingGif(1);
-            $scope.relation = '';
-            initRelations()
-
-            $scope.hideLoadingBar = 0;
-
+            setRelationText('');
+            initRelations();
+            setLoadingBar(0);
             setLoadType(false, true);
 
             updateAuthors(0, url);
 
+            setHeaderText('Results for \"' + $scope.aSearch + '\"');
 
             $('html, body').animate({ scrollTop: 0 }, 'fast');
         }
@@ -85,23 +81,21 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
 
     $scope.quoteSearch = function() {
         if($scope.qSearch != null) {
-            setLoadingGif(1);
-            initRelations()
-            $scope.authors = [];
-            trackPage = 0;
-            $scope.relation = '';
+            var url = baseURL + 'get_quotes_search.php?query='
+                + $scope.qSearch + '&limit=100&start=0';
 
+            trackPage = 0;
+
+            setLoadingGif(1);
+            setRelationText('');
+            initRelations()
+            initAuthors();
+            setLoadingBar(0);
             setLoadType(true, false);
 
-            $scope.hideLoadingBar = 0;
+            updateQuotes(0, url, 1);
 
-            var url = baseURL + 'get_quotes_search.php?query='
-                + $scope.qSearch + '&limit=100&start=' + trackPage;
-
-            lastSearch = $scope.qSearch;
-
-            updateQuotes(0, url, 1, lastSearch);
-            setLoadingGif(0);
+            setHeaderText('Results for \"' + $scope.qSearch + '\"');
 
             $('html, body').animate({ scrollTop: 0 }, 'fast');
         }
@@ -109,90 +103,33 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
 
     $scope.title = function() {
         setLoadingGif(1);
-        $scope.authors = [];
+        setRelationText('');
         initRelations();
-        $scope.relation = '';
-        $scope.hideLoadingBar = 0;
-
+        initAuthors();
+        setLoadingBar(0);
         setLoadType(false, false);
 
-        updateQuotes(0, url, 0, '');
+        setHeaderText('Random quotes');
+        updateQuotes(0, url, 0);
 
         $('html, body').animate({ scrollTop: 0 }, 'fast');
     }
 
     $scope.setAuthor = function(guy) {
-        setLoadingGif(1);
-
-        $scope.authors = [];
-        initRelations();
-        $scope.relation = '';
-        $scope.hideLoadingBar = 1;
-
-        $('html, body').animate({ scrollTop: 0 }, 'fast');
-
         var url = baseURL + 'get_author_single.php?author=' + guy;
 
-        $.getJSON(url, function(json) {
-            var status = json[0].Response;
+        setLoadingGif(1);
 
-            if(status === 'Good') {
-                var getQuotes1 = [];
-                var getQuotes2 = [];
-                var getQuotes3 = [];
+        initRelations();
+        setRelationText('');
+        setLoadingBar(1);
 
-                var authorsResponse = json[1];
-                var relations = json[2];
-                var relationsSize = relations.length;
-                var authorsSize = authorsResponse.length;
-                var arrFlag = 0;
+        updateQuotes(2, url, 0);
 
-                $scope.relation = 'Related to ' + guy;
-
-                for(var i = 0; i < authorsSize; i++) {
-                    var author = '- ' + authorWP(guy);
-                    var quote = '"' + authorsResponse[i]['quote'] + '"';
-
-                    var add = {'authorRaw': guy,
-                            'author': author, 'quote': quote};
-
-                    switch(arrFlag)
-                    {
-                        case 0: getQuotes1.push(add); break;
-                        case 1: getQuotes2.push(add); break;
-                        case 2: getQuotes3.push(add); break;
-                        default: break;
-                    }
-
-                    arrFlag = checkArrFlag(arrFlag, 3);
-                }
-
-                arrFlag = 0;
-
-                for(var i = 0; i < relationsSize; i++) {
-                    var add = {'relation': relations[i]};
-
-                    $scope.relations[arrFlag].push(add);
-
-                    arrFlag = checkArrFlag(arrFlag, 3);
-                }
-            }
-
-            $scope.quotes1 = getQuotes1;
-            $scope.quotes2 = getQuotes2;
-            $scope.quotes3 = getQuotes3;
-
-            setLoadingGif(0);
-            $scope.$apply();
-        });
+        $('html, body').animate({ scrollTop: 0 }, 'fast');
     }
 
     function updateAuthors(type, url) {
-        if(type === 0) {
-            trackPage = 0;
-            $scope.authors = [];
-        }
-
         $.getJSON(url, function(json) {
             var status = json[0].Response;
 
@@ -215,16 +152,16 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
                     }
                 }
 
-                $scope.quotes1 = [];
-                $scope.quotes2 = [];
-                $scope.quotes3 = [];
+                initQuotes();
 
-                $scope.button = 'Load more...';
+                setLoadingText('Load more...');
                 setLoadingGif(0);
                 $scope.$apply();
             } else {
                setLoadingGif(0);
             }
+
+            $scope.aSearch = null;
         });
     }
 
@@ -241,18 +178,24 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
 
                 var arrFlag = 0;
 
+                if(type === 2) {
+                    var relations = json[2];
+                    var relationsSize = relations.length;
+                }
+
                 for(var i = 0; i < quotesSize; i++) {
                     var quote = '"' + quotesRespose[i].quote + '"';
-                    var author = authorWP(quotesRespose[i].author);
+                    var authorRaw = quotesRespose[i].author;
+                    var author = '- ' + authorWP(authorRaw);
 
                     if(hl === 1) {
-                        quote = str_highlight_text(quote, hlStr)
+                        quote = str_highlight_text(quote, $scope.qSearch)
                     }
 
-                    var add = {'quote': quote, 'author': '- ' + author,
-                        'authorRaw': quotesRespose[i].author};
+                    var add = {'quote': quote, 'author': author,
+                        'authorRaw': authorRaw};
 
-                    if(type === 0) {
+                    if(type === 0 || type === 2) {
                         switch(arrFlag)
                         {
                             case 0: getQuotes1.push(add); break;
@@ -260,14 +203,8 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
                             case 2: getQuotes3.push(add); break;
                             default: break;
                         }
-                    } else {
-                        switch(arrFlag)
-                        {
-                            case 0: $scope.quotes1.push(add); break;
-                            case 1: $scope.quotes2.push(add); break;
-                            case 2: $scope.quotes3.push(add); break;
-                            default: break;
-                        }
+                    } else  {
+                        $scope.quotes[arrFlag].push(add);
                     }
 
                     arrFlag = checkArrFlag(arrFlag, 3);
@@ -277,16 +214,35 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
                     }
                 }
 
-                if(type === 0) {
-                    $scope.quotes1 = getQuotes1;
-                    $scope.quotes2 = getQuotes2;
-                    $scope.quotes3 = getQuotes3;
+                if(type === 2) {
+                    arrFlag = 0;
+
+                    setHeaderText(authorRaw + ' quotes');
+                    $scope.relation = 'Related to ' + authorRaw;
+
+                    for(var i = 0; i < relationsSize; i++) {
+                        var add = {'relation': relations[i]};
+
+                        $scope.relations[arrFlag].push(add);
+
+                        arrFlag = checkArrFlag(arrFlag, 3);
+                    }
+
+                    initAuthors();
                 }
 
-                $scope.button = 'Load more...';
+                if(type === 0 || type === 2) {
+                    $scope.quotes[0] = getQuotes1;
+                    $scope.quotes[1] = getQuotes2;
+                    $scope.quotes[2] = getQuotes3;
+                }
+
+                setLoadingText('Load more...');
                 setLoadingGif(0);
                 $scope.$apply();
             }
+
+            $scope.qSearch = null;
         });
     }
 
@@ -317,9 +273,23 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
                 str + '</span>'});
     }
 
+    function initAuthors() {
+        $scope.authors = [];
+    }
+
     function initRelations() {
+        $scope.relations = [];
+
         for(var i = 0; i < 3; i++) {
             $scope.relations[i] = [];
+        }
+    }
+
+    function initQuotes() {
+        $scope.quotes = [];
+
+        for(var i = 0; i < 3; i++) {
+            $scope.quotes[i] = [];
         }
     }
 
@@ -334,5 +304,21 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
         } else {
             $scope.loading = "img/nothing.png";
         }
+    }
+
+    function setLoadingBar(setVal) {
+        $scope.hideLoadingBar = setVal;
+    }
+
+    function setLoadingText(text) {
+        $scope.button = text;
+    }
+
+    function setRelationText(text) {
+        $scope.relation = text;
+    }
+
+    function setHeaderText(text) {
+        $scope.header = text;
     }
 }]);

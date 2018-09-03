@@ -76,40 +76,6 @@ body
     max-width: 90%;
 }
 
-.box-w
-{
-    border-style: solid;
-    border-color: #cccccc;
-    border-width: 0px;
-    padding: 15px;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    font-size: 15px;
-    text-align: left;
-    background-color: #fefefe;
-    color: #000000;
-}
-
-.title
-{
-    border-bottom-style: solid;
-    border-bottom-color: #cccccc;
-    border-bottom-width: 1px;
-    padding: 80px;
-    background-color: #e5e3cc;
-    text-align: center;
-}
-
-.title-text
-{
-    font-size: 60px;
-}
-
-.subtxt
-{
-    font-size: 20px;
-}
-
 .footer
 {
     border-bottom-style: solid;
@@ -123,39 +89,24 @@ body
     text-align: center;
 }
 
-.box
-{
-    font-weight: bold;
-    border-style: solid;
-    border-color: #cccccc;
-    border-width: .5px;
-    background-color: #f2f2f2;
-    padding-left: 10px;
-    margin-bottom: 10px;
-}
-
-.desc
-{
-    padding: 10px;
-    margin-bottom: 10px;
-}
-
-.color
-{
-    color: #14489b;
-    font-weight: bold;
-}
-
-.updateButton
+.updateButton, .header
 {
     border-style: solid;
     border-color: #000000;
     border-width: 1px;
-    cursor: pointer;
     background: #e5ddd0;
     padding: 10px;
     text-align: center;
     margin-bottom: 20px;
+}
+
+.header
+{
+    border-left-width: 0px;
+    border-right-width: 0px;
+    background-color: #d6cdb3;
+    padding: 20px;
+    font-size: 25px;
 }
 
 .updateButton:hover
@@ -223,7 +174,7 @@ body
     margin-left: 12px;
 }
 
-.titleimg
+.titleimg, .updateButton
 {
     cursor: pointer;
 }
