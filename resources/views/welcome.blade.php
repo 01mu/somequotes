@@ -151,7 +151,7 @@
                     </div>
                 </div>
             </div>
-            <div class="updateButton" ng-click="loadMore()" ng-cloak ng-hide="0">
+            <div class="updateButton" ng-click="loadMore()" ng-hide="hideLoadingBar" ng-cloak>
                 @{{button}}
             </div>
         </div>

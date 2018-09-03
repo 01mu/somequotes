@@ -14,8 +14,8 @@ app.filter('fix', function($sce) {
 app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
     function($scope, $http, $rootScope) {
 
+    $scope.hideLoadingBar = 0;
     $scope.loading = "img/nothing.png";
-    //$scope.hideLoadingBar = false;
 
     $scope.quotes1 = [];
     $scope.quotes2 = [];
@@ -24,8 +24,6 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
     $scope.authors = [];
 
     $scope.relations = [];
-
-    $scope.hideLoadingBar = false;
 
     initRelations();
 
@@ -40,7 +38,7 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
     updateQuotes(0, url, 0, '');
 
     $scope.loadMore = function() {
-        $scope.hideLoadingBar = true;
+
         $scope.loading = "img/load.gif";
         $scope.relation = '';
         $scope.button = 'Loading...';
@@ -59,7 +57,7 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
                 trackPage + '&query=' + $scope.aSearch;
 
             updateAuthors(1, url);
-        } else {
+        } else {$scope.hideLoadingBar = false;
             var url = baseURL + 'get_quotes_random.php?limit=100&start=0';
 
             updateQuotes(1, url, 0, '');
@@ -80,6 +78,7 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
             initRelations()
 
             quoteSearchFlag = 0;
+            $scope.hideLoadingBar = 0;
             authorSearchFlag = 1;
 
             updateAuthors(0, url);
@@ -99,6 +98,7 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
 
             quoteSearchFlag = 1;
             authorSearchFlag = 0;
+            $scope.hideLoadingBar = 0;
 
             var url = baseURL + 'get_quotes_search.php?query='
                 + $scope.qSearch + '&limit=100&start=' + trackPage;
@@ -116,6 +116,7 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
         $scope.authors = [];
         initRelations();
         $scope.relation = '';
+        $scope.hideLoadingBar = 0;
 
         updateQuotes(0, url, 0, '');
 
@@ -133,6 +134,7 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
         initRelations();
 
         $scope.relation = '';
+        $scope.hideLoadingBar = 1;
 
         $('html, body').animate({ scrollTop: 0 }, 'fast');
 
@@ -154,7 +156,8 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
                     var author = '- ' + authorWP(guy);
                     var quote = '"' + authorsResponse[i]['quote'] + '"';
 
-                    var add = {'author': author, 'quote': quote};
+                    var add = {'authorRaw': guy,
+                            'author': author, 'quote': quote};
 
                     switch(arrFlag)
                     {
@@ -252,6 +255,10 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
                     }
 
                     arrFlag = checkArrFlag(arrFlag, 3);
+
+                    if(quotesSize < 100) {
+                        $scope.hideLoadingBar = 1;
+                    }
                 }
 
                 if(type === 0) {
