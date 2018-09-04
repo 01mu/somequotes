@@ -111,9 +111,13 @@
                     </div>
                 </div>
             </div>
-            <span ng-cloak>
+            </div>
+            </div>
+            <div class="header" ng-hide="hideRelations" ng-cloak>
                 @{{relation}}
-            </span>
+            </div>
+            <div class="container-fluid">
+            <div class="body">
             <div class="row">
                 <div class="col-sm-4">
                     <div ng-repeat="p in relations[0]" ng-cloak>
@@ -163,7 +167,14 @@
     <div class="footer">
         Some Quotes | All quotes from
         <a href="https://en.wikiquote.org/wiki/Main_Page">wikiquote.org</a>
-        | Some Quotes is not affiliated with Wikiquote
+        | Some Quotes is not affiliated with Wikiquote<br>
+        <a href="https://www.github.com/01mu/sq-wikiquote">
+            <img class="titleimg" ng-src="img/github.png"/>
+        <a href="https://play.google.com/store/apps/details?id=io.smallfol.somequotes">
+            <img class="titleimg" ng-src="img/play.png"/>
+        <a href="https://www.twitter.com/somequotesbot">
+            <img class="titleimg" ng-src="img/twitter2.png"/>
+        </a>
     </div>
    <script src="js/script.js"></script>
 </body>

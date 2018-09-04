@@ -21,13 +21,14 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
 
     var url = baseURL + 'get_quotes_random.php?limit=100&start=0';
 
-    setHeaderText('Random quotes');
+    setHeaderText('Quotes');
     setLoadingText('Getting quotes...');
 
     updateQuotes(0, url, 0);
 
     setLoadingBar(0);
     setLoadingGif(1);
+    setRelations(1);
 
     initAuthors();
     initRelations();
@@ -46,10 +47,12 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
 
             updateQuotes(1, url, 1);
         } else if(authorSearchFlag == 1) {
-            url = baseURL + 'get_author_search.php?limit=100&start=0' +
-                '&query=' + $scope.aSearch;
+            trackPage += 100;
 
-            updateAuthors(0, url);
+            url = baseURL + 'get_author_search.php?limit=100&start=' +
+                trackPage + '&query=' + $scope.aSearch;
+
+            updateAuthors(1, url);
         } else {
             setLoadingBar(0);
             var url = baseURL + 'get_quotes_random.php?limit=100&start=0';
@@ -70,6 +73,7 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
             initRelations();
             setLoadingBar(0);
             setLoadType(false, true);
+            setRelations(1);
 
             updateAuthors(0, url);
 
@@ -92,6 +96,7 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
             initAuthors();
             setLoadingBar(0);
             setLoadType(true, false);
+            setRelations(1);
 
             updateQuotes(0, url, 1);
 
@@ -108,8 +113,9 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
         initAuthors();
         setLoadingBar(0);
         setLoadType(false, false);
+        setRelations(1);
 
-        setHeaderText('Random quotes');
+        setHeaderText('Quotes');
         updateQuotes(0, url, 0);
 
         $('html, body').animate({ scrollTop: 0 }, 'fast');
@@ -142,6 +148,10 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
                     return;
                 }
 
+                if(type === 0) {
+                    initAuthors();
+                }
+
                 for(var i = 0; i < authorsSize; i++) {
                     var add = {'author': authorsResponse[i]['author']};
 
@@ -158,10 +168,10 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
                 setLoadingGif(0);
                 $scope.$apply();
             } else {
-               setLoadingGif(0);
+               $scope.title();
             }
 
-            $scope.aSearch = null;
+            //$scope.aSearch = null;
         });
     }
 
@@ -218,7 +228,8 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
                     arrFlag = 0;
 
                     setHeaderText(authorRaw + ' quotes');
-                    $scope.relation = 'Related to ' + authorRaw;
+                    setRelationText('Related to ' + authorRaw);
+                    setRelations(0);
 
                     for(var i = 0; i < relationsSize; i++) {
                         var add = {'relation': relations[i]};
@@ -240,9 +251,11 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
                 setLoadingText('Load more...');
                 setLoadingGif(0);
                 $scope.$apply();
+            } else {
+                $scope.title();
             }
 
-            $scope.qSearch = null;
+            //$scope.qSearch = null;
         });
     }
 
@@ -308,6 +321,10 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
 
     function setLoadingBar(setVal) {
         $scope.hideLoadingBar = setVal;
+    }
+
+    function setRelations(setVal) {
+        $scope.hideRelations = setVal;
     }
 
     function setLoadingText(text) {
