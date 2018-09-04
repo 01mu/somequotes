@@ -126,7 +126,6 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
 
         setLoadingGif(1);
 
-        initRelations();
         setRelationText('');
         setLoadingBar(1);
 
@@ -230,6 +229,7 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
                     setHeaderText(authorRaw + ' quotes');
                     setRelationText('Related to ' + authorRaw);
                     setRelations(0);
+                    initRelations();
 
                     for(var i = 0; i < relationsSize; i++) {
                         var add = {'relation': relations[i]};
