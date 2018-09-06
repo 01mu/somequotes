@@ -2,7 +2,6 @@ $(document).ready(function(){
     $('[data-toggle="popover"]').popover();
 });
 
-//const baseURL = 'https://smallfolio.bitnamiapp.com/somequotes/';
 const baseURL = 'https://somequotes.herokuapp.com/api/';
 
 var app = angular.module('textBoxes', []);
@@ -20,7 +19,6 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
     var quoteSearchFlag = 0;
     var authorSearchFlag = 0;
 
-    //var url = baseURL + 'get_quotes_random.php?limit=100&start=0';
     var url = baseURL + 'get_quotes_random/100/0';
 
     setHeaderText('Quotes');
@@ -44,9 +42,6 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
         if(quoteSearchFlag == 1) {
             trackPage += 100;
 
-            //var url = baseURL + 'get_quotes_search.php?query=' +
-            //    $scope.qSearch + '&limit=100&start=' + trackPage;
-
             var url = baseURL + 'get_quotes_search/100/' + trackPage + '/' +
                 $scope.qSearch;
 
@@ -54,16 +49,12 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
         } else if(authorSearchFlag == 1) {
             trackPage += 100;
 
-            //url = baseURL + 'get_author_search.php?limit=100&start=' +
-            //    trackPage + '&query=' + $scope.aSearch;
-
             var url = baseURL + 'get_author_search/100/' + trackPage + '/' +
                 $scope.aSearch;
 
             updateAuthors(1, url);
         } else {
             setLoadingBar(0);
-            //var url = baseURL + 'get_quotes_random.php?limit=100&start=0';
 
             var url = baseURL + 'get_quotes_random/100/0';
 
@@ -73,9 +64,6 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
 
     $scope.authorSearch = function() {
         if($scope.aSearch != null) {
-            //var url = baseURL + 'get_author_search.php?limit=100&start=0&query='
-            //    + $scope.aSearch;
-
             var url = baseURL + 'get_author_search/100/0/' + $scope.aSearch;
 
             trackPage = 0;
@@ -97,9 +85,6 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
 
     $scope.quoteSearch = function() {
         if($scope.qSearch != null) {
-            //var url = baseURL + 'get_quotes_search.php?query='
-            //    + $scope.qSearch + '&limit=100&start=0';
-
             var url = baseURL + 'get_quotes_search/100/0/' + $scope.qSearch;
 
             trackPage = 0;
@@ -136,8 +121,6 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
     }
 
     $scope.setAuthor = function(guy) {
-        //var url = baseURL + 'get_author_single.php?author=' + guy;
-
         var url = baseURL + 'get_author_single/' + guy;
 
         setLoadingGif(1);
@@ -185,8 +168,6 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
             } else {
                $scope.title();
             }
-
-            //$scope.aSearch = null;
         });
     }
 
@@ -270,8 +251,6 @@ app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
             } else {
                 $scope.title();
             }
-
-            //$scope.qSearch = null;
         });
     }
 
