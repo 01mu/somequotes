@@ -15,7 +15,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('search_quotes', function()
-{
-    return view('search_quotes');
+Route::group(['prefix' => 'api'], function () {
+    Route::get('get_quotes_random/{limit}/{start}',
+        'APIController@GetQuotesRandom');
+    Route::get('get_author_search/{limit}/{start}/{query}',
+        'APIController@GetAuthorSearch');
+    Route::get('get_quotes_search/{limit}/{start}/{query}',
+        'APIController@GetQuotesSearch');
+    Route::get('get_author_single/{author}',
+        'APIController@GetAuthorSingle');
 });
