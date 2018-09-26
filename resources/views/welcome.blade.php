@@ -15,7 +15,9 @@
             <div class="navbar-left">
                 <img class="titleimg" ng-src="img/sq.png" ng-click="title()"/>
             </div>
-            <a class="navbar-brand" ng-click="title()">Some Quotes</a>
+            <a class="navbar-brand" ng-click="title()" ng-cloak>
+                Some Quotes | @{{header}}
+            </a>
         </div>
         <form class="navbar-form navbar-right">
             <form novalidate>
@@ -34,9 +36,6 @@
         </div>
     </nav>
     <div style="margin-top: 70px;"></div>
-    <div class="header" ng-cloak>
-        @{{header}}
-    </div>
     <div class="container-fluid">
         <div class="body">
             <!--<div class="row">
