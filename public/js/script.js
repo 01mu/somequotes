@@ -1,3 +1,8 @@
+/*
+ * somequotes.herokuapp.com
+ * github.com/01mu
+ */
+
 $(document).ready(function(){
     $('[data-toggle="popover"]').popover();
 });
