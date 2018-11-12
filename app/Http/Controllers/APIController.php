@@ -40,8 +40,8 @@ class APIController extends Controller
     {
         $query = str_replace(' ', '%20', $query);
 
-        $url = $this->base_url . 'get_author_search.php?limit='.$limit.'&start='
-            .$start.'&query='.$query;
+        $url = $this->base_url . 'get_author_search.php?limit=' . $limit .
+            '&start=' . $start . '&query=' . $query;
 
         return $this->GetRequest($url);
     }
@@ -50,7 +50,7 @@ class APIController extends Controller
     {
         $author = str_replace(' ', '%20', $author);
 
-        $url = $this->base_url . 'get_author_single.php?author='.$author;
+        $url = $this->base_url . 'get_author_single.php?author=' . $author;
 
         return $this->GetRequest($url);
     }
