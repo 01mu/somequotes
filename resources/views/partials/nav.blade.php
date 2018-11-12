@@ -7,7 +7,6 @@
             Some Quotes | @{{header}}
         </a>
     </div>
-
     <form class="navbar-form navbar-right">
         <form novalidate>
             <input class="form-control" type="text" placeholder="Search Quotes" ng-model="qSearch">
@@ -16,7 +15,6 @@
             </button>
         </form>
     </form>
-
     <form class="navbar-form navbar-right">
         <form novalidate>
             <input class="form-control" type="text" placeholder="Search Authors" ng-model="aSearch">
@@ -25,11 +23,9 @@
             </button>
         </form>
     </form>
-
     <div class="navbar-right">
         <img class="loading" ng-cloak ng-src="@{{loading}}"/>
     </div>
 </nav>
-
 <div style="margin-top: 70px;">
 </div>
