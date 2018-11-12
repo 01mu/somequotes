@@ -10,11 +10,11 @@
 <div class="row">
     @include('partials/quotes')
 </div>
-</div>
-</div>
+
 <div class="header" ng-hide="hideRelations" ng-cloak>
     @{{relation}}
 </div>
+
 <div class="container-fluid">
 <div class="body">
 <div class="row">
