@@ -13,7 +13,7 @@ hr
     text-align: center;
     cursor: pointer;
     border-style: solid;
-    border-color: #000000;
+    border-color: #ccc;
     border-width: 1px;
     padding: 20px;
     padding-top: 30px;
@@ -24,7 +24,7 @@ hr
 {
     cursor: pointer;
     border-style: solid;
-    border-color: #000000;
+    border-color: #ccc;
     border-width: 1px;
     padding: 20px;
     padding-top: 30px;
