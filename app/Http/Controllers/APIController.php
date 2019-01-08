@@ -1,4 +1,8 @@
 <?php
+/*
+ * somequotes
+ * github.com/01mu
+ */
 
 namespace App\Http\Controllers;
 
@@ -16,6 +20,11 @@ class APIController extends Controller
     public function __construct()
     {
         $this->base_url = 'https://smallfolio.bitnamiapp.com/somequotes/';
+    }
+
+    public function LoadBlank($limit, $query)
+    {
+        return ['Response' => 'Bad'];
     }
 
     public function GetQuotesSearch($limit, $start, $query)

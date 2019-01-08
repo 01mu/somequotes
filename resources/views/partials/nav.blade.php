@@ -1,3 +1,8 @@
+<!--
+    somequotes
+    github.com/01mu
+-->
+
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-header">
         <div class="navbar-left">

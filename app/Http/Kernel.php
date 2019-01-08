@@ -1,4 +1,8 @@
 <?php
+/*
+ * somequotes
+ * github.com/01mu
+ */
 
 namespace App\Http;
 
