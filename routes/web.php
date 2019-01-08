@@ -19,7 +19,7 @@ Route::get('/test', function () {
     return view('test');
 });
 
-Route::group(['prefix' => 'api'], function () {
+Route::group(['prefix' => 'api', 'middleware' => 'cors'], function () {
     Route::get('get_quotes_random/{limit}/{start}',
         'APIController@GetQuotesRandom');
     Route::get('get_author_search/{limit}/{start}/{query}',
