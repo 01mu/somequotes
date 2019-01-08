@@ -7,3 +7,4 @@
 <title>Some Quotes</title>
 <link rel="icon" type="image/png" href="img/sq.png">
 <link href="css/site.css" rel="stylesheet" type="text/css" media="all">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
