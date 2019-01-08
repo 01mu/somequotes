@@ -24,7 +24,7 @@ class APIController extends Controller
 
     public function LoadBlank($limit, $query)
     {
-        return ['Response' => 'Bad'];
+        return [['Response' => 'Bad']];
     }
 
     public function GetQuotesSearch($limit, $start, $query)
