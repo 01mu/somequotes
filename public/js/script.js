@@ -9,7 +9,7 @@ $(document).ready(function(){
 
 const baseURL = 'https://somequotes.herokuapp.com/api/';
 
-var app = angular.module('somequotes', []);
+var app = angular.module('textBoxes', []);
 
 app.filter('fix', function($sce) {
     return function(val) {
@@ -17,9 +17,8 @@ app.filter('fix', function($sce) {
     };
 });
 
-app.controller('body', ['$scope', '$http', '$rootScope',
+app.controller('boxCtrl', ['$scope', '$http', '$rootScope',
     function($scope, $http, $rootScope) {
-
     var trackPage = 0;
     var quoteSearchFlag = 0;
     var authorSearchFlag = 0;

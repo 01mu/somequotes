@@ -3,7 +3,7 @@
 <head>
     @include('partials/header')
 </head>
-<body ng-app="somequotes" ng-controller="body">
+<body ng-app="textBoxes" ng-controller="boxCtrl">
     @include('partials/nav')
     @include('partials/authors')
     <div class="container-fluid">
